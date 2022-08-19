@@ -7,7 +7,7 @@ import seaborn as sns
 import numpy as np
 
 # DATA PREPRARATION
-df = pd.read_csv('data/bank-full.csv', delimiter=';')
+df = pd.read_csv('data/bank.csv', delimiter=';')
 
 # Drop Columns
 df = df.drop(columns = ['job', 'marital', 'education','contact', 'month', 'poutcome'])
