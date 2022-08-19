@@ -1,7 +1,8 @@
 import pandas as pd
 from sklearn.metrics import confusion_matrix 
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -25,8 +26,13 @@ X = df.drop('y', axis=1)
 y = df['y']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=46)
 
+# preprocessing
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
 # MODELLING
-model = RandomForestClassifier(n_estimators=100, random_state=46)
+model = SVC(kernel='rbf')
 model.fit(X_train, y_train)
 
 # Model Report
@@ -39,23 +45,23 @@ with open('metrics.txt', 'w') as f:
     f.write("Testing Accuracy: {}\n".format(test_score))
 
 # Feature Importance Plot
-importances = model.feature_importances_
-labels = df.columns
-feature_df = pd.DataFrame(list(zip(labels, importances)), columns = ["feature","importance"])
-feature_df = feature_df.sort_values('importance', ascending=False)
+# importances = model.feature_importances_
+# labels = df.columns
+# feature_df = pd.DataFrame(list(zip(labels, importances)), columns = ["feature","importance"])
+# feature_df = feature_df.sort_values('importance', ascending=False)
 
-axis_fs = 18 #fontsize
-title_fs = 22 #fontsize
-sns.set(style="whitegrid")
+# axis_fs = 18 #fontsize
+# title_fs = 22 #fontsize
+# sns.set(style="whitegrid")
 
-ax = sns.barplot(x="importance", y="feature", data=feature_df)
-ax.set_xlabel('Importance',fontsize = axis_fs) 
-ax.set_ylabel('Feature', fontsize = axis_fs)#ylabel
-ax.set_title('Random forest\nfeature importance', fontsize = title_fs)
+# ax = sns.barplot(x="importance", y="feature", data=feature_df)
+# ax.set_xlabel('Importance',fontsize = axis_fs) 
+# ax.set_ylabel('Feature', fontsize = axis_fs)#ylabel
+# ax.set_title('Random forest\nfeature importance', fontsize = title_fs)
 
-plt.tight_layout()
-plt.savefig("feature_importance.png",dpi=120) 
-plt.close()
+# plt.tight_layout()
+# plt.savefig("feature_importance.png",dpi=120) 
+# plt.close()
 
 # Confusion Matrix Plot
 axis_fs = 18 #fontsize
